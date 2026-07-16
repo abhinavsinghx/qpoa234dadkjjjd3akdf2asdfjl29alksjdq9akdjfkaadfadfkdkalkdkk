@@ -93,6 +93,8 @@ function saveTasks(tasks) {
 function renderTask(task, index) {
   const li = document.createElement("li");
   li.className = "task-item";
+  li.draggable = true;
+  li.dataset.index = index;
 
   if (task.restored) {
     li.classList.add("restored");
@@ -105,6 +107,38 @@ function renderTask(task, index) {
       <button data-index="${index}">🗑️</button>
     </div>
   `;
+
+  // Drag events
+  li.addEventListener("dragstart", (e) => {
+    li.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", index);
+  });
+
+  li.addEventListener("dragend", () => {
+    document.querySelectorAll(".task-item").forEach(el => {
+      el.classList.remove("dragging", "drag-over");
+    });
+  });
+
+  li.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    document.querySelectorAll(".task-item").forEach(el => el.classList.remove("drag-over"));
+    li.classList.add("drag-over");
+  });
+
+  li.addEventListener("drop", (e) => {
+    e.preventDefault();
+    const fromIndex = parseInt(e.dataTransfer.getData("text/plain"));
+    const toIndex = parseInt(li.dataset.index);
+    if (fromIndex === toIndex) return;
+
+    const tasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const [moved] = tasks.splice(fromIndex, 1);
+    tasks.splice(toIndex, 0, moved);
+    saveTasks(tasks);
+    loadTasks();
+  });
 
   taskList.appendChild(li);
 }
