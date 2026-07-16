@@ -10,13 +10,13 @@
   --border:      #3a2e14;
 
   /* Dispatch buttons (top row) */
-  --dispatch-bg:    #252018;
-  --dispatch-hover: #92400e;
-  --dispatch-text:  #fcd34d;
+  --dispatch-bg:    #3d2500;
+  --dispatch-hover: #b45309;
+  --dispatch-text:  #fbbf24;
 
   /* Remarks buttons (bottom row) */
-  --remarks-bg:    #1e1a12;
-  --remarks-hover: #b45309;
+  --remarks-bg:    #2a2000;
+  --remarks-hover: #a16207;
   --remarks-text:  #fde68a;
 
   /* Task items */
@@ -80,28 +80,30 @@ hr {
 .buttons:first-of-type .item {
   background: var(--dispatch-bg);
   color: var(--dispatch-text);
-  border-color: #3a2e14;
+  border-color: #8b5500;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,200,80,0.08);
 }
 
 .buttons:first-of-type .item:hover {
   background: var(--dispatch-hover);
   border-color: var(--task-accent);
   color: #fff;
-  box-shadow: 0 0 7px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5), 0 2px 6px rgba(0,0,0,0.5);
 }
 
 /* Bottom row — remarks */
 .buttons:last-of-type .item {
   background: var(--remarks-bg);
   color: var(--remarks-text);
-  border-color: #2e200a;
+  border-color: #6b5500;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,220,100,0.06);
 }
 
 .buttons:last-of-type .item:hover {
   background: var(--remarks-hover);
   border-color: var(--task-accent);
   color: #fff;
-  box-shadow: 0 0 7px rgba(245, 158, 11, 0.35);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.45), 0 2px 6px rgba(0,0,0,0.5);
 }
 
 /* ── Task area ── */
