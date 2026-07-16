@@ -212,18 +212,14 @@ export function geRemarks(script) {
 }
 
 export function hrhItRemarks(script) {
-    let regularScript = script;
     navigator.clipboard.readText().then(text => {
-        let textList = text.split(' ');
-        for (let i=0; i < textList.length; i++) {
-            if (textList[i].toLowerCase() == "ticket") {
-                let newScript = "HRH IT: " + text;
-                copyingText(newScript);
-                break;
-            }
+        const hasTicket = text.split(' ').some(word => word.toLowerCase() === "ticket");
+        if (hasTicket) {
+            copyingText("HRH IT: " + text);
+        } else {
+            copyingText(script);
         }
     });
-    copyingText(regularScript);
 }
 
 export function asPerRemarks() {

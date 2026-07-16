@@ -1,35 +1,65 @@
 * {
-	font-family: "Helvetica";
+  font-family: "Helvetica";
+  box-sizing: border-box;
 }
 
 :root {
-  --color-primary: #8A0000;
-  --color-secondary: #3B060A;
-  --color-accent: #a42900;
-  --color-white: #E0D9D9;
+  --bg-base:      #08080f;
+  --bg-surface:   #10101e;
+  --bg-elevated:  #17172a;
+  --border:       #2a2a45;
+
+  /* Dispatch buttons (top row) */
+  --dispatch-bg:    #1b1b35;
+  --dispatch-hover: #3730a3;
+  --dispatch-text:  #c7d2fe;
+
+  /* Remarks buttons (bottom row) */
+  --remarks-bg:    #0f1f18;
+  --remarks-hover: #065f46;
+  --remarks-text:  #a7f3d0;
+
+  /* Task items */
+  --task-bg:      #1a1a2e;
+  --task-accent:  #6c63ff;
+  --task-restore: #064e3b;
+
+  --text-primary: #e8e6f6;
+  --text-muted:   #7c7a9e;
+
+  --input-border: #4c4aad;
+  --input-focus:  #6c63ff;
+
+  --btn-ctrl-bg:    #1a1a2e;
+  --btn-ctrl-hover: #6c63ff;
 }
 
 body {
+  background: var(--bg-base);
+  color: var(--text-primary);
   height: 90vh;
-  padding-bottom: 8.5rem; /* EXTRA space so last task never hides */
-
+  padding-bottom: 8.5rem;
+  margin: 0;
 }
 
 ::selection {
-  color: var(--color-white);
-  background: var(--color-secondary);
+  color: #fff;
+  background: var(--task-accent);
 }
 
 hr {
   border: 0;
-  border-top: 2px solid black;
+  border-top: 1px solid var(--border);
+  margin: 4px 0;
 }
 
-.buttons{
-  display:flex;
-  align-items:center;
+/* ── Button rows ── */
+.buttons {
+  display: flex;
+  align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
+  padding: 3px 0;
 }
 
 .item {
@@ -37,20 +67,43 @@ hr {
   font-weight: bold;
   text-transform: uppercase;
   padding: 0.25rem 0.5rem;
-  transition: all 0.35s ease-in;
   margin: 2px 5px;
-  background: var(--color-secondary);
-  color: var(--color-white);
-  border: 1px solid black;
-  border-radius: 5%;
-}
-
-.item:hover {
-  background: var(--color-primary);
-  color: var(--color-white);
+  border-radius: 4px;
+  border: 1px solid transparent;
   cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  letter-spacing: 0.04em;
 }
 
+/* Top row — dispatch */
+.buttons:first-of-type .item {
+  background: var(--dispatch-bg);
+  color: var(--dispatch-text);
+  border-color: #2e2e58;
+}
+
+.buttons:first-of-type .item:hover {
+  background: var(--dispatch-hover);
+  border-color: #6c63ff;
+  color: #fff;
+  box-shadow: 0 0 6px rgba(108, 99, 255, 0.45);
+}
+
+/* Bottom row — remarks */
+.buttons:last-of-type .item {
+  background: var(--remarks-bg);
+  color: var(--remarks-text);
+  border-color: #1a3d2e;
+}
+
+.buttons:last-of-type .item:hover {
+  background: var(--remarks-hover);
+  border-color: #10b981;
+  color: #fff;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+}
+
+/* ── Task area ── */
 strong {
   font-size: 0.75rem;
   display: block;
@@ -65,43 +118,67 @@ strong {
 
 #taskInput {
   position: fixed;
-  bottom: 3px;              /* sticks to bottom */
-  left: 2.75%;               /* same margin as task-area (95% width) */
-  width: 89%;           
+  bottom: 3px;
+  left: 2.75%;
+  width: 89%;
   padding: 8px;
   font-size: 10px;
-  border: 2px solid var(--color-primary);
+  border: 2px solid var(--input-border);
   outline: none;
   resize: none;
   height: 3rem;
-  background: white;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
   z-index: 10;
-  border-radius: 4px;
+  border-radius: 6px;
   font-weight: bold;
   margin: auto;
+  transition: border-color 0.2s ease;
 }
 
+#taskInput:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+}
+
+#taskInput::placeholder {
+  color: var(--text-muted);
+}
 
 #taskList {
   list-style: none;
   padding: 0;
   margin-top: 8px;
-  padding-bottom: 7rem;      /* SAFETY buffer under list */
+  padding-bottom: 7rem;
   max-height: 60vh;
   overflow-y: auto;
+}
+
+#taskList::-webkit-scrollbar {
+  width: 4px;
+}
+
+#taskList::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+
+#taskList::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
 }
 
 .task-item {
   display: flex;
   flex-direction: column;
-  background: var(--color-accent);
-  color: var(--color-white);
+  background: var(--task-bg);
+  color: var(--text-primary);
   font-weight: bold;
   text-transform: capitalize;
-  padding: 4px 6px;
+  padding: 5px 7px;
   margin-bottom: 4px;
   font-size: 8px;
-  border-radius: 3px;
+  border-radius: 5px;
+  border-left: 3px solid var(--task-accent);
 }
 
 .task-text {
@@ -111,7 +188,8 @@ strong {
 }
 
 .task-text:focus {
-  border: 1px dotted white;
+  border: 1px dotted rgba(108, 99, 255, 0.5);
+  border-radius: 2px;
 }
 
 .task-meta {
@@ -123,7 +201,8 @@ strong {
 
 .task-time {
   font-size: 7px;
-  opacity: 0.8;
+  opacity: 0.6;
+  color: var(--text-muted);
 }
 
 .task-item button {
@@ -131,9 +210,15 @@ strong {
   cursor: pointer;
   background: transparent;
   border: none;
-  color: white;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
 }
 
+.task-item button:hover {
+  color: #f87171;
+}
+
+/* ── History controls ── */
 .history-controls {
   position: fixed;
   bottom: 3.6rem;
@@ -145,20 +230,22 @@ strong {
 
 .history-controls button {
   font-size: 9px;
-  padding: 2px 5px;
+  padding: 2px 6px;
   border-radius: 4px;
-  border: 1px solid var(--color-primary);
-  background: var(--color-secondary);
-  color: var(--color-white);
+  border: 1px solid var(--border);
+  background: var(--btn-ctrl-bg);
+  color: var(--text-primary);
   cursor: pointer;
-  transition: all 0.35s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .history-controls button:hover {
-  background: var(--color-primary);
+  background: var(--btn-ctrl-hover);
+  border-color: var(--task-accent);
 }
 
 /* restored task highlight */
 .task-item.restored {
-  background: #004b23; /* visually different but still dark */
+  background: var(--task-restore);
+  border-left-color: #10b981;
 }

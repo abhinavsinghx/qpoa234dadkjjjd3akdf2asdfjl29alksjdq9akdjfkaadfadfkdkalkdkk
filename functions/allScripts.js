@@ -24,7 +24,7 @@ const allScripts = {
 	// Remarks
 	remarksClearCode: "Received call from Ext. CONTACT. Staff requested to cancel the code. Announced, 'Cancel - CDANN' twice overhead.",
 	remarksCode: "Code was announced overhead twice as, 'CDANN'.",
-	remarksSupportServices: "Event assigned to Support Services",
+	remarksSupportServices: "Notified Support Services.",
 	remarksSecurity: "Event assigned to Security Department.",
 	remarksHrhIt: "Event assigned to HRH IT.",
 	remarksBiomed: "Event assigned to Biomed.",
