@@ -1,4 +1,5 @@
 import copyingText from "./functions/copyingText.js";
+import { initSettings, openSettings, closeSettings } from "./functions/settings.js";
 import {
   extensionOnly,
   nameOnly,
@@ -186,3 +187,17 @@ document.getElementById("clearHistory").onclick = () => {
 
 // Initial load
 loadTasks();
+
+// Settings
+initSettings();
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const overlay = document.getElementById('settings-overlay');
+    if (overlay.classList.contains('open')) {
+      closeSettings();
+    } else {
+      openSettings();
+    }
+  }
+});

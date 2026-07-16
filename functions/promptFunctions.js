@@ -1,5 +1,6 @@
 import copyingText from "./copyingText.js";
 import allScripts from "./allScripts.js";
+import { getAgvCodes } from "./settings.js";
 
 let globalCodeCall = false;
 let globalCodeAnnoucement = "";
@@ -59,25 +60,7 @@ export function agv(script) {
     const location = prompt("Location:");
     const errorInput = prompt("Error Message(s) (space-separated codes):");
 
-    // Define error codes as STRINGS (important)
-    const errorCodeMap = {
-        "2368": "Rear Bumper",
-        "2314": "Front Bumper",
-        "2019": "Load Detect Fault",
-        "2050": "Cart not in position to raise lift",
-        "1884": "No Auto-Mode Guidesafe",
-        "5499": "Safety system modules not okay",
-        "5509": "Encoder crosscheck failure",
-        "5510": "Speed outside safety tolerance",
-        "4028": "Navigation Module: Movement too far",
-        "1272": "Nav - Large position uncertainty",
-        "4024": "Navigation module: Reporting Errors",
-        "1394": "XML Message IDs are not synchronized; Check out of service and back into service",
-        "1847": "Safe Bumper Override Timeout",
-        "1881": "Override Request Error",
-        "5502": "EFI 2 Fault",
-        "0": "RF Communication Error",
-    };
+    const errorCodeMap = getAgvCodes();
 
     // Convert input safely
     const errorCodes = errorInput
