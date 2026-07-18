@@ -78,10 +78,21 @@ function startEdit(tr, oldCode, oldDesc) {
     tr.querySelector('#edit-desc').focus();
 
     tr.querySelector('.agv-confirm-btn').onclick = () => {
-        const newCode = tr.querySelector('#edit-code').value.trim();
-        const newDesc = tr.querySelector('#edit-desc').value.trim();
+        const editCodeInput = tr.querySelector('#edit-code');
+        const editDescInput = tr.querySelector('#edit-desc');
+        const newCode = editCodeInput.value.trim();
+        const newDesc = editDescInput.value.trim();
         if (!newCode || !newDesc) return;
+
         const all = getAgvCodes();
+        if (newCode !== oldCode && all[newCode] !== undefined) {
+            editCodeInput.style.borderColor = '#f87171';
+            editCodeInput.title = `Code ${newCode} already exists: "${all[newCode]}"`;
+            editCodeInput.focus();
+            setTimeout(() => { editCodeInput.style.borderColor = ''; editCodeInput.title = ''; }, 3000);
+            return;
+        }
+
         if (newCode !== oldCode) delete all[oldCode];
         all[newCode] = newDesc;
         saveAgvCodes(all);
@@ -170,14 +181,25 @@ export function initSettings() {
 }
 
 function saveNewCode() {
-    const code = document.getElementById('agv-new-code').value.trim();
-    const desc = document.getElementById('agv-new-desc').value.trim();
+    const codeInput = document.getElementById('agv-new-code');
+    const descInput = document.getElementById('agv-new-desc');
+    const code = codeInput.value.trim();
+    const desc = descInput.value.trim();
     if (!code || !desc) return;
+
     const all = getAgvCodes();
+    if (all[code] !== undefined) {
+        codeInput.style.borderColor = '#f87171';
+        codeInput.title = `Code ${code} already exists: "${all[code]}"`;
+        codeInput.focus();
+        setTimeout(() => { codeInput.style.borderColor = ''; codeInput.title = ''; }, 3000);
+        return;
+    }
+
     all[code] = desc;
     saveAgvCodes(all);
-    document.getElementById('agv-new-code').value = '';
-    document.getElementById('agv-new-desc').value = '';
+    codeInput.value = '';
+    descInput.value = '';
     document.getElementById('agv-add-form').classList.add('hidden');
     renderAgvTable();
 }
