@@ -9,7 +9,12 @@ export default function copyingText(message) {
     hour: "2-digit",
     minute: "2-digit"
   });
-  const timestamp = `${formatted} GMT-5 Abhinav Singh:`;
+  const offsetStr = new Intl.DateTimeFormat('en', {
+    timeZone: 'America/Toronto',
+    timeZoneName: 'shortOffset'
+  }).formatToParts(now).find(p => p.type === 'timeZoneName').value;
+
+  const timestamp = `${formatted} ${offsetStr} Abhinav Singh:`;
   const textToCopy = `${timestamp} ${message}`;
 
   // Try modern clipboard API first
