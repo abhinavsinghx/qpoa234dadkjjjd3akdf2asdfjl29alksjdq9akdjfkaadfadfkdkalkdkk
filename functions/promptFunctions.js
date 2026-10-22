@@ -8,6 +8,7 @@ let globalCodeClearBackup = "";
 
 export function extensionOnly(script) {
     const extension = prompt("Extension: ");
+    if (extension === null) return;
     let newScript = script.replace('CONTACT', extension);
     copyingText(newScript);
 }

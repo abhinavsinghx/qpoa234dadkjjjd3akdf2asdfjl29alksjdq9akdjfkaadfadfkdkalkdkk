@@ -7,7 +7,7 @@ const allScripts = {
 	lights: "Caller has reported lights not working at the given location. Alternate lights are present, so, the room is not completely dark. Please attend and thank you.\n- Please call CONTACT if required.",
 	lightsDark: "Caller has reported lights not working at the given location. The room is completely dark. Please attend and thank you.\n- Please call CONTACT if required.",
 	terminalClean: "Please attend and complete the follwing cleaning request. The details are mentioned below:\nCleaning Type: CT\nDate Requested: DR\nTime Requested: TR\nType of work completed: TW\nExtension/Contact: EC",
-	tooCold: "Caller reported that it is too cold at the given location. Please attend and thank you.\n- Ext: CONTACT",
+	tooCold: "Caller reported that it is too cold at the given location. Please attend and thank you.\n- Ext. CONTACT",
 	tooHot: "Caller reported that it is too hot at the given location. Please attend and thank you.\n- Ext. CONTACT",
 	aprDeactivate: "Caller requested to deactivate negative pressure room at the given location. This request has been approved by IPAC. Please attend and thank you.\n- Ext. CONTACT",
 	aprActivate: "Caller requested to activate negative pressure room at the given location. Please attend and thank you.\n- Ext. CONTACT",
