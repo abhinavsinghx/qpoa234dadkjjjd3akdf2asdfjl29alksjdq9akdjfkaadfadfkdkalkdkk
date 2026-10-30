@@ -1,71 +1,92 @@
 import copyingText from "./copyingText.js";
 import allScripts from "./allScripts.js";
+import showDialog from "./dialog.js";
 import { getAgvCodes } from "./settings.js";
 
 let globalCodeCall = false;
 let globalCodeAnnoucement = "";
 let globalCodeClearBackup = "";
 
-export function extensionOnly(script) {
-    const extension = prompt("Extension: ");
-    if (extension === null) return;
-    let newScript = script.replace('CONTACT', extension);
+const EXT = { name: "extension", label: "Extension" };
+
+export async function extensionOnly(script) {
+    const v = await showDialog({ title: "Contact", fields: [EXT] });
+    if (!v) return;
+    copyingText(script.replace('CONTACT', v.extension));
+}
+
+export async function nameOnly(script, id) {
+    const fields = [{ name: "name", label: "Person Attending" }];
+    if (id == "remarksTemp") fields.push({ name: "range", label: "RDS Range" });
+
+    const v = await showDialog({ title: "Assigned To", fields });
+    if (!v) return;
+
+    let newScript = script.replace('PERSON', v.name);
+    newScript = newScript.replace('RGE', v.range ?? "");
     copyingText(newScript);
 }
 
-export function nameOnly(script, id) {
-    const name = prompt("Person Attending: ");
-    let newScript = script.replace('PERSON', name);
-    let range = null
-    if (id == "remarksTemp") { console.log(id); range = prompt("Enter Range: "); }
-    newScript = newScript.replace('RGE', range);
+export async function referenceNumber(script, id) {
+    const v = await showDialog({ title: "Reference", fields: [{ name: "rn", label: "Reference Number" }] });
+    if (!v) return;
+    copyingText(script.replace('RN', v.rn));
+}
+
+export async function terminalClean(script) {
+    const v = await showDialog({
+        title: "Terminal Clean",
+        fields: [
+            { name: "type", label: "Cleaning Type", value: "Terminal Clean" },
+            { name: "date", label: "Date Requested" },
+            { name: "time", label: "Time Requested" },
+            { name: "work", label: "Type of Work" },
+            { name: "contact", label: "Contact", value: "50000" },
+        ],
+    });
+    if (!v) return;
+
+    let newScript = script.replace('CT', v.type);
+    newScript = newScript.replace('DR', v.date);
+    newScript = newScript.replace('TR', v.time);
+    newScript = newScript.replace('TW', v.work);
+    newScript = newScript.replace('EC', v.contact);
     copyingText(newScript);
 }
 
-export function referenceNumber(script, id) {
-    const referenceNumber = prompt("Reference Number: ");
-    let newScript = script.replace('RN', referenceNumber);
-    copyingText(newScript);
-}
+export async function trashLinen(script) {
+    const v = await showDialog({
+        title: "TransVac Risers",
+        fields: [{ name: "which", label: "Which ones have issues", options: ["One", "Two", "One & Two"] }],
+    });
+    if (!v) return;
 
-export function terminalClean(script) {
-    const cleaningType = prompt("Cleaning Type: ", "Terminal Clean");
-    const dateRequested = prompt("Date Requested: ");
-    const timeRequested = prompt("Time Requested: ");
-    const typeOfWork = prompt("Type of Work: ");
-    const contact = prompt("Contact: ", 50000);
+    let newScript = script.replace("WHICH", v.which);
+    newScript = newScript.replace("WHICH", v.which); //Two times
 
-    let newScript = script.replace('CT', cleaningType);
-    newScript = newScript.replace('DR', dateRequested);
-    newScript = newScript.replace('TR', timeRequested);
-    newScript = newScript.replace('TW', typeOfWork);
-    newScript = newScript.replace('EC', contact);
-
-    copyingText(newScript);
-}
-
-export function trashLinen(script) {
-    const which = prompt("Which ones has issues (One/Two/One & Two): ");
-    let newScript = script.replace("WHICH", which);
-    newScript = newScript.replace("WHICH", which); //Two times
-
-    if (which.toLowerCase() == "one" || which.toUpperCase() == "two") {
+    if (v.which != "One & Two") {
         newScript = newScript.replace("risers", "riser");
         newScript = newScript.replace("risers", "riser");
     }
     copyingText(newScript);
 }
 
-export function agv(script) {
-    const number = prompt("AGV Number:");
-    const location = prompt("Location:");
-    const errorInput = prompt("Error Message(s) (space-separated codes):");
+export async function agv(script) {
+    const v = await showDialog({
+        title: "AGV Alarm",
+        fields: [
+            { name: "number", label: "AGV Number" },
+            { name: "location", label: "Location" },
+            { name: "errors", label: "Error Message(s) (space-separated codes)" },
+        ],
+    });
+    if (!v) return;
 
     const errorCodeMap = getAgvCodes();
 
     // Convert input safely
-    const errorCodes = errorInput
-        ? [...new Set(errorInput.trim().split(/\s+/))] // removes duplicates
+    const errorCodes = v.errors
+        ? [...new Set(v.errors.trim().split(/\s+/))] // removes duplicates
         : [];
 
     const formattedErrors = errorCodes
@@ -76,30 +97,32 @@ export function agv(script) {
     })
     .join(" ||  ");
 
-    let newScript = script.replace("NUMBER", number);
-    newScript = newScript.replace("LOC", location);
+    let newScript = script.replace("NUMBER", v.number);
+    newScript = newScript.replace("LOC", v.location);
     newScript = newScript.replace("ERR", formattedErrors);
 
     copyingText(newScript);
 }
 
-export function externalDepartments(script, id) {
-    const equipmentType = prompt("Equipment Type: ");
-    const typeOfRequest = prompt("Type of Request: ");
-    
-    let newScript = script.replace("EQUIP", equipmentType);
-    newScript = newScript.replace("TOR", typeOfRequest);
-    if (id == "humberIt" || id == "ge") {
-        const equipmentId = prompt("Equipment ID: ", "NA");
-        newScript = newScript.replace("EQID", equipmentId);
-    }
+export async function externalDepartments(script, id) {
+    const fields = [
+        { name: "equipment", label: "Equipment Type" },
+        { name: "request", label: "Type of Request" },
+    ];
+    if (id == "humberIt" || id == "ge") fields.push({ name: "equipmentId", label: "Equipment ID", value: "NA" });
+    if (id == "ge") fields.push({ name: "status", label: "Machine Status", value: "Urgent | " });
+    fields.push(EXT);
 
-    if (id == "ge") {
-        const machineStatus = prompt("Machine Status: ", "Urgent | ");
-        newScript = newScript.replace("STAT", machineStatus);
-    }
+    const v = await showDialog({ title: "Equipment Request", fields });
+    if (!v) return;
 
-    extensionOnly(newScript);
+    let newScript = script.replace("EQUIP", v.equipment);
+    newScript = newScript.replace("TOR", v.request);
+    if (v.equipmentId !== undefined) newScript = newScript.replace("EQID", v.equipmentId);
+    if (v.status !== undefined) newScript = newScript.replace("STAT", v.status);
+    newScript = newScript.replace("CONTACT", v.extension);
+
+    copyingText(newScript);
 }
 
 export function alarmFormatter() {
@@ -144,32 +167,40 @@ export function alarmFormatter() {
     });
 }
 
-export function codes(script, id) {
+export async function codes(script, id) {
+    const fields = [
+        { name: "type", label: "Code Type: Code" },
+        { name: "announcement", label: "Announcement" },
+    ];
+    if (id == "nc") fields.push({ name: "nomenclature", label: "Code Nomenclature" });
+    else if (id == "codeLine") fields.push(EXT);
+
+    const v = await showDialog({ title: "Code", fields });
+    if (!v) return;
+
     globalCodeCall = true;
 
-    const codeType = prompt("Code Type: Code ");
-    const codeAnn = prompt("Annoucement: ");
-
-    let newScript = script.replace("CDTYP", codeType);
-    newScript = newScript.replace("CDANN", codeAnn);
+    let newScript = script.replace("CDTYP", v.type);
+    newScript = newScript.replace("CDANN", v.announcement);
 
     if (id == "nc") {
-        const codeNom = prompt("Code Nomenclature: ");
-        newScript = newScript.replace("CDNOM", codeNom);
+        newScript = newScript.replace("CDNOM", v.nomenclature);
+        copyingText(newScript);
+    }
+    else if (id == "codeLine") {
+        newScript = newScript.replace("CONTACT", v.extension);
         copyingText(newScript);
     }
 
-    else if (id == "codeLine") {
-        extensionOnly(newScript);
-    }
-
-    globalCodeAnnoucement = codeAnn;
-    globalCodeClearBackup = codeAnn;
+    globalCodeAnnoucement = v.announcement;
+    globalCodeClearBackup = v.announcement;
 }
 
-export function codeRemarks(script) {
+export async function codeRemarks(script) {
     if (!globalCodeCall) {
-        globalCodeAnnoucement = prompt("Announcement: ")
+        const v = await showDialog({ title: "Code Announced", fields: [{ name: "announcement", label: "Announcement" }] });
+        if (!v) return;
+        globalCodeAnnoucement = v.announcement;
     }
     let newScript = script.replace("CDANN", globalCodeAnnoucement);
     copyingText(newScript);
@@ -179,20 +210,27 @@ export function codeRemarks(script) {
     globalCodeAnnoucement = "";
 }
 
-export function clearCodeRemarks(script) {
-    let extension = prompt("Ext: ");
+export async function clearCodeRemarks(script) {
+    const v = await showDialog({
+        title: "Cancel Code",
+        fields: [
+            { name: "extension", label: "Ext" },
+            { name: "announcement", label: "Announcement", value: globalCodeClearBackup },
+        ],
+    });
+    if (!v) return;
 
-    let newScript = script.replace("CONTACT", extension);
-    newScript = newScript.replace("CDANN", globalCodeClearBackup);
+    let newScript = script.replace("CONTACT", v.extension);
+    newScript = newScript.replace("CDANN", v.announcement);
 
     copyingText(newScript);
     globalCodeClearBackup = "";
 }
 
-export function geRemarks(script) {
-    const referenceNumber = prompt("Enter Reference number: ");
-    let newScript = script.replace("RN", referenceNumber);
-    copyingText(newScript);
+export async function geRemarks(script) {
+    const v = await showDialog({ title: "GE Called", fields: [{ name: "rn", label: "Reference Number" }] });
+    if (!v) return;
+    copyingText(script.replace("RN", v.rn));
 }
 
 export function hrhItRemarks(script) {
@@ -206,10 +244,11 @@ export function hrhItRemarks(script) {
     });
 }
 
-export function asPerRemarks() {
-    const asPerWho = prompt("As per Who: ");
+export async function asPerRemarks() {
+    const v = await showDialog({ title: "As Per", fields: [{ name: "who", label: "As per Who" }] });
+    if (!v) return;
     navigator.clipboard.readText().then(text => {
-        const script = "As per " + asPerWho + ': "'+ text + '."';
+        const script = "As per " + v.who + ': "'+ text + '."';
         copyingText(script);
     })
 }
