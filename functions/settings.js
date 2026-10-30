@@ -1,4 +1,20 @@
 export const AGV_STORAGE_KEY = 'qfm_agv_codes';
+export const BUTTONS_STORAGE_KEY = 'qfm_show_buttons';
+
+// The script buttons are optional now that QFM Filler writes events straight
+// into QFM — with them hidden, this page is just the logger.
+export function getShowButtons() {
+    return localStorage.getItem(BUTTONS_STORAGE_KEY) !== 'hide';
+}
+
+function setShowButtons(show) {
+    localStorage.setItem(BUTTONS_STORAGE_KEY, show ? 'show' : 'hide');
+    applyShowButtons();
+}
+
+function applyShowButtons() {
+    document.body.classList.toggle('logger-only', !getShowButtons());
+}
 
 const defaultAgvCodes = {
     "0":    "RF Communication Error",
@@ -111,6 +127,7 @@ export function initSettings() {
                 <div id="settings-sidebar-title">Settings</div>
                 <ul id="settings-nav">
                     <li class="settings-nav-item active" data-section="agv">🤖 AGV Codes</li>
+                    <li class="settings-nav-item" data-section="event">📋 Event</li>
                 </ul>
             </div>
             <div id="settings-content">
@@ -136,6 +153,27 @@ export function initSettings() {
                             </thead>
                             <tbody id="agv-tbody"></tbody>
                         </table>
+                    </div>
+                </div>
+                <div id="settings-section-event" class="settings-section hidden">
+                    <div class="settings-section-header">
+                        <span class="settings-section-title">Event Buttons</span>
+                    </div>
+                    <div class="settings-radio-group">
+                        <label class="settings-radio">
+                            <input type="radio" name="show-buttons" value="show" />
+                            <span>
+                                <span class="settings-radio-title">Show the buttons</span>
+                                <span class="settings-radio-hint">Event and remarks buttons above the logger, as before.</span>
+                            </span>
+                        </label>
+                        <label class="settings-radio">
+                            <input type="radio" name="show-buttons" value="hide" />
+                            <span>
+                                <span class="settings-radio-title">Hide the buttons</span>
+                                <span class="settings-radio-hint">Just the logger. QFM Filler covers the buttons inside QFM.</span>
+                            </span>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -176,6 +214,12 @@ export function initSettings() {
         document.getElementById('agv-new-code').value = '';
         document.getElementById('agv-new-desc').value = '';
     };
+
+    document.querySelectorAll('input[name="show-buttons"]').forEach(radio => {
+        radio.checked = (radio.value === 'show') === getShowButtons();
+        radio.onchange = () => { if (radio.checked) setShowButtons(radio.value === 'show'); };
+    });
+    applyShowButtons();
 
     renderAgvTable();
 }

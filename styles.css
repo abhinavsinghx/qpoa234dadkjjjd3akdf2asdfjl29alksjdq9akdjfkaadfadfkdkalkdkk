@@ -403,6 +403,60 @@ strong {
   color: #000;
 }
 
+/* Event tab — show or hide the script buttons */
+.settings-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-radio {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.settings-radio:hover {
+  border-color: var(--input-border);
+}
+
+.settings-radio:has(input:checked) {
+  background: var(--remarks-bg);
+  border-color: var(--task-accent);
+}
+
+.settings-radio input {
+  margin: 2px 0 0;
+  accent-color: var(--task-accent);
+  cursor: pointer;
+}
+
+.settings-radio-title {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.settings-radio-hint {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Logger only: the button rows and their dividers go */
+body.logger-only .buttons,
+body.logger-only hr {
+  display: none;
+}
+
 /* Add form */
 .agv-add-form {
   display: flex;
