@@ -76,37 +76,7 @@ hr {
   letter-spacing: 0.04em;
 }
 
-/* Event buttons, grouped into categories */
-.events {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: flex-start;
-  gap: 6px 12px;
-  padding: 4px 6px;
-}
-
-.category {
-  display: flex;
-  flex-direction: column;
-}
-
-.category-label {
-  margin: 0 5px;
-  padding: 0 4px 2px;
-  font-size: 10px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-  border-bottom: 1px solid var(--border);
-}
-
-.category .buttons {
-  justify-content: flex-start;
-  padding: 2px 0 0;
-}
-
+/* Event categories — one button each, opening a small box of its items */
 .events .item {
   background: var(--dispatch-bg);
   color: var(--dispatch-text);
@@ -119,17 +89,6 @@ hr {
   border-color: var(--task-accent);
   color: #fff;
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.5), 0 2px 6px rgba(0,0,0,0.5);
-}
-
-/* A placeholder that isn't set up yet */
-.events .item.soon,
-.events .item.soon:hover {
-  background: var(--bg-surface);
-  color: var(--text-muted);
-  border: 1px dashed #6b5500;
-  box-shadow: none;
-  opacity: 0.7;
-  cursor: default;
 }
 
 /* The remarks row keeps the plain look it has always had. */
@@ -742,4 +701,50 @@ body.logger-only hr {
 @keyframes dialog-pop {
   from { opacity: 0; transform: translateY(8px) scale(0.97); }
   to   { opacity: 1; transform: none; }
+}
+
+/* ── Category box ── */
+.menu-modal {
+  max-width: 420px;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.menu-item {
+  padding: 0.55rem 0.6rem;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  border: 1px solid #8b5500;
+  background: var(--dispatch-bg);
+  color: var(--dispatch-text);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,200,80,0.08);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  background: var(--dispatch-hover);
+  border-color: var(--task-accent);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5), 0 2px 6px rgba(0,0,0,0.5);
+  outline: none;
+}
+
+/* A placeholder that isn't set up yet */
+.menu-item.soon,
+.menu-item.soon:hover {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border: 1px dashed #6b5500;
+  box-shadow: none;
+  opacity: 0.7;
+  cursor: default;
 }

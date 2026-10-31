@@ -17,63 +17,82 @@ import {
   asPerRemarks
 } from "./functions/promptFunctions.js";
 import allScripts from "./functions/allScripts.js";
+import categories from "./functions/categories.js";
+import showMenu from "./functions/menu.js";
 
 // ================= BUTTON SCRIPTS =================
-document.querySelectorAll('.item').forEach(item => {
-  item.onclick = () => {
-    if (item.classList.contains("soon")) return; // placeholder, not set up yet
-
+// What a button does, by its id. Event items come from the category boxes,
+// remarks from the row of buttons that is always on the page.
+function handleItem(id) {
     const allowedExtensionOnly = ["doorAccess", "tooHot", "tooCold", "toiletClogged", "sinkClogged", "lights", "lightsDark", "aprDeactivate", "aprActivate"];
     const allowedNameOnly = ["remarksAssignedJciGen", "remarksNotifiedJciGen", "remarksTemp"];
     const allowedExternalDepartments = ["biomed", "humberIt", "ge"];
     const allowedCodeIds = ["codeLine", "nc"];
 
-    if (allowedExtensionOnly.includes(item.id)) {
-      extensionOnly(allScripts[item.id]);
+    if (allowedExtensionOnly.includes(id)) {
+      extensionOnly(allScripts[id]);
     }
-    else if (item.id === "lockerCut") {
-      lockerCut(allScripts[item.id]);
+    else if (id === "lockerCut") {
+      lockerCut(allScripts[id]);
     }
-    else if (allowedExternalDepartments.includes(item.id)) {
-      externalDepartments(allScripts[item.id], item.id);
+    else if (allowedExternalDepartments.includes(id)) {
+      externalDepartments(allScripts[id], id);
     }
-    else if (allowedNameOnly.includes(item.id)) {
-      nameOnly(allScripts[item.id], item.id);
+    else if (allowedNameOnly.includes(id)) {
+      nameOnly(allScripts[id], id);
     }
-    else if (item.id === "terminalClean") {
-      terminalClean(allScripts[item.id]);
+    else if (id === "terminalClean") {
+      terminalClean(allScripts[id]);
     }
-    else if (item.id === "trash" || item.id === "linen") {
-      trashLinen(allScripts[item.id]);
+    else if (id === "trash" || id === "linen") {
+      trashLinen(allScripts[id]);
     }
-    else if (item.id === "agv") {
-      agv(allScripts[item.id]);
+    else if (id === "agv") {
+      agv(allScripts[id]);
     }
-    else if (item.id === "alarmFormatter") {
+    else if (id === "alarmFormatter") {
       alarmFormatter();
     }
-    else if (allowedCodeIds.includes(item.id)) {
-      codes(allScripts[item.id], item.id);
+    else if (allowedCodeIds.includes(id)) {
+      codes(allScripts[id], id);
     }
-    else if (item.id === "remarksCode") {
-      codeRemarks(allScripts[item.id]);
+    else if (id === "remarksCode") {
+      codeRemarks(allScripts[id]);
     }
-    else if (item.id === "remarksGe") {
-      geRemarks(allScripts[item.id]);
+    else if (id === "remarksGe") {
+      geRemarks(allScripts[id]);
     }
-    else if (item.id === "remarksHrhIt") {
-      hrhItRemarks(allScripts[item.id]);
+    else if (id === "remarksHrhIt") {
+      hrhItRemarks(allScripts[id]);
     }
-    else if (item.id === "remarksAsPer") {
+    else if (id === "remarksAsPer") {
       asPerRemarks();
     }
-    else if (item.id=="remarksClearCode") {
-      clearCodeRemarks(allScripts[item.id]);
+    else if (id=="remarksClearCode") {
+      clearCodeRemarks(allScripts[id]);
     }
     else {
-      copyingText(allScripts[item.id]);
+      copyingText(allScripts[id]);
     }
+}
+
+// Remarks: always on the main screen.
+document.querySelectorAll('.remarks .item').forEach(item => {
+  item.onclick = () => handleItem(item.id);
+});
+
+// Events: one button per category, each opening a small box of its items.
+const categoryRow = document.getElementById("categoryButtons");
+categories.forEach(cat => {
+  const button = document.createElement("span");
+  button.className = "item";
+  button.id = "category-" + cat.id;
+  button.textContent = cat.label;
+  button.onclick = async () => {
+    const chosen = await showMenu({ title: cat.label, items: cat.items });
+    if (chosen) handleItem(chosen);
   };
+  categoryRow.appendChild(button);
 });
 
 // ================= TASK SYSTEM =================
