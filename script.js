@@ -2,6 +2,7 @@ import copyingText from "./functions/copyingText.js";
 import { initSettings, openSettings, closeSettings } from "./functions/settings.js";
 import {
   extensionOnly,
+  lockerCut,
   nameOnly,
   terminalClean,
   trashLinen,
@@ -20,13 +21,18 @@ import allScripts from "./functions/allScripts.js";
 // ================= BUTTON SCRIPTS =================
 document.querySelectorAll('.item').forEach(item => {
   item.onclick = () => {
-    const allowedExtensionOnly = ["doorAccess", "tooHot", "tooCold", "toiletClogged", "lights", "lightsDark", "aprDeactivate", "aprActivate"];
+    if (item.classList.contains("soon")) return; // placeholder, not set up yet
+
+    const allowedExtensionOnly = ["doorAccess", "tooHot", "tooCold", "toiletClogged", "sinkClogged", "lights", "lightsDark", "aprDeactivate", "aprActivate"];
     const allowedNameOnly = ["remarksAssignedJciGen", "remarksNotifiedJciGen", "remarksTemp"];
     const allowedExternalDepartments = ["biomed", "humberIt", "ge"];
     const allowedCodeIds = ["codeLine", "nc"];
 
     if (allowedExtensionOnly.includes(item.id)) {
       extensionOnly(allScripts[item.id]);
+    }
+    else if (item.id === "lockerCut") {
+      lockerCut(allScripts[item.id]);
     }
     else if (allowedExternalDepartments.includes(item.id)) {
       externalDepartments(allScripts[item.id], item.id);

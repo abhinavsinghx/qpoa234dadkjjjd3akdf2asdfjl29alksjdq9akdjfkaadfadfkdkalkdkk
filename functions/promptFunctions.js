@@ -15,6 +15,17 @@ export async function extensionOnly(script) {
     copyingText(script.replace('CONTACT', v.extension));
 }
 
+export async function lockerCut(script) {
+    const v = await showDialog({
+        title: "Locker Cut",
+        fields: [{ name: "locker", label: "Locker Number" }, EXT],
+    });
+    if (!v) return;
+    let newScript = script.replace("LOCKER", v.locker);
+    newScript = newScript.replace("CONTACT", v.extension);
+    copyingText(newScript);
+}
+
 export async function nameOnly(script, id) {
     const fields = [{ name: "name", label: "Person Attending" }];
     if (id == "remarksTemp") fields.push({ name: "range", label: "RDS Range" });

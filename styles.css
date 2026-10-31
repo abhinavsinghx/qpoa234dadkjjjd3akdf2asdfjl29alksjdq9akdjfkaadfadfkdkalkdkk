@@ -76,35 +76,63 @@ hr {
   letter-spacing: 0.04em;
 }
 
-/* Top row — dispatch */
-.buttons:first-of-type .item {
+/* Event buttons, grouped into categories */
+.events {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+  gap: 6px 12px;
+  padding: 4px 6px;
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-label {
+  margin: 0 5px;
+  padding: 0 4px 2px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.category .buttons {
+  justify-content: flex-start;
+  padding: 2px 0 0;
+}
+
+.events .item {
   background: var(--dispatch-bg);
   color: var(--dispatch-text);
   border-color: #8b5500;
   box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,200,80,0.08);
 }
 
-.buttons:first-of-type .item:hover {
+.events .item:hover {
   background: var(--dispatch-hover);
   border-color: var(--task-accent);
   color: #fff;
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.5), 0 2px 6px rgba(0,0,0,0.5);
 }
 
-/* Bottom row — remarks */
-.buttons:last-of-type .item {
-  background: var(--remarks-bg);
-  color: var(--remarks-text);
-  border-color: #6b5500;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,220,100,0.06);
+/* A placeholder that isn't set up yet */
+.events .item.soon,
+.events .item.soon:hover {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border: 1px dashed #6b5500;
+  box-shadow: none;
+  opacity: 0.7;
+  cursor: default;
 }
 
-.buttons:last-of-type .item:hover {
-  background: var(--remarks-hover);
-  border-color: var(--task-accent);
-  color: #fff;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.45), 0 2px 6px rgba(0,0,0,0.5);
-}
+/* The remarks row keeps the plain look it has always had. */
 
 /* ── Task area ── */
 strong {
@@ -451,8 +479,9 @@ strong {
   color: var(--text-muted);
 }
 
-/* Logger only: the button rows and their dividers go */
-body.logger-only .buttons,
+/* Logger only: the buttons, their categories and the dividers go */
+body.logger-only .events,
+body.logger-only .remarks,
 body.logger-only hr {
   display: none;
 }

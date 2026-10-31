@@ -5,46 +5,92 @@
 <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <div class="buttons">
-    <span class="item" id="morgue">10-12</span>
-    <!-- <span class="item" id="panic">Panic</span> -->
-    <span class="item" id="doorAccess">Door</span>
-    <span class="item" id="codeLine">CL</span>
-    <span class="item" id="nc">NC</span>
-    <span class="item" id="biomed">Biomed</span>
-    <span class="item" id="humberIt">HRH IT</span>
-    <span class="item" id="ge">GE</span>
-    <span class="item" id="toiletClogged">Toilet</span>
-    <!-- <span class="item" id="lights">Lights</span> -->
-    <!-- <span class="item" id="lightsDark">Lights - Dark</span> -->
-    <span class="item" id="agv">AGV</span>
-    <span class="item" id="aprActivate">APR Activate</span>
-    <!-- <span class="item" id="trash">Trash</span> -->
-    <!-- <span class="item" id="linen">Linen</span> -->
-    <!-- <span class="item" id="terminalClean">Terminal Clean</span> -->
-    <span class="item" id="tooCold">Too Cold</span>
-    <span class="item" id="aprDeactivate">APR Deactivate</span>
-    <span class="item" id="tooHot">Too Hot</span>
-    <span class="item" id="alarmFormatter">Format Alarm</span>
+  <div class="events">
+    <div class="category">
+      <div class="category-label">Security</div>
+      <div class="buttons">
+        <span class="item" id="morgue">10-12</span>
+        <span class="item" id="doorAccess">Door</span>
+        <span class="item" id="lockerCut">Locker Cut</span>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Codes</div>
+      <div class="buttons">
+        <span class="item" id="nc">NC</span>
+        <span class="item" id="codeLine">CL</span>
+        <span class="item" id="panic">Panic</span>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">External</div>
+      <div class="buttons">
+        <span class="item" id="biomed">Biomed</span>
+        <span class="item" id="humberIt">HRH IT</span>
+        <span class="item" id="ge">GE</span>
+        <span class="item soon" id="supportServices" title="Not set up yet">Support Services</span>
+        <!-- <span class="item" id="terminalClean">Terminal Clean</span> -->
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Engineer</div>
+      <div class="buttons">
+        <span class="item" id="tooHot">Too Hot</span>
+        <span class="item" id="tooCold">Too Cold</span>
+        <span class="item" id="aprActivate">APR Activate</span>
+        <span class="item" id="aprDeactivate">APR Deactivate</span>
+        <span class="item" id="alarmFormatter">Format Alarm</span>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Plumbing</div>
+      <div class="buttons">
+        <span class="item" id="toiletClogged">Toilet</span>
+        <span class="item" id="sinkClogged">Sink Clogged</span>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">Electrical</div>
+      <div class="buttons">
+        <span class="item" id="lightsDark">Lights - Dark</span>
+        <span class="item" id="lights">Lights</span>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-label">FM</div>
+      <div class="buttons">
+        <span class="item" id="agv">AGV</span>
+        <!-- <span class="item" id="trash">Trash</span> -->
+        <!-- <span class="item" id="linen">Linen</span> -->
+      </div>
+    </div>
   </div>
 
   <hr>
 
-  <div class="buttons">
-    <span class="item" id="remarksSecurity">SEC</span>
-    <span class="item" id="remarksSupportServices">SUPPORT</span>
-    <span class="item" id="remarksCode">CODE</span>
-    <span class="item" id="remarksHrhIt">HRH IT</span>
-    <span class="item" id="remarksBiomed">Bio</span>
-    <span class="item" id="remarksAssignedJciGen">J-AG</span>
-    <span class="item" id="remarksNotifiedJciGen">J-NG</span>
-<span class="item" id="remarksTemp">Temps</span>
-    <span class="item" id="remarksGe">GE</span>
-    <span class="item" id="remarksAsPer">As Per</span>
-    <span class="item" id="remarksClearCode">CC</span>
+  <div class="remarks">
+    <div class="buttons">
+      <span class="item" id="remarksSecurity">SEC</span>
+      <span class="item" id="remarksSupportServices">SUPPORT</span>
+      <span class="item" id="remarksCode">CODE</span>
+      <span class="item" id="remarksHrhIt">HRH IT</span>
+      <span class="item" id="remarksBiomed">Bio</span>
+      <span class="item" id="remarksAssignedJciGen">J-AG</span>
+      <span class="item" id="remarksNotifiedJciGen">J-NG</span>
+      <span class="item" id="remarksTemp">Temps</span>
+      <span class="item" id="remarksGe">GE</span>
+      <span class="item" id="remarksAsPer">As Per</span>
+      <span class="item" id="remarksClearCode">CC</span>
+    </div>
   </div>
 
-  <hr>  
+  <hr>
   <div class="history-controls">
     <button id="restoreHistory">↩</button>
     <button id="clearHistory">✖</button>
