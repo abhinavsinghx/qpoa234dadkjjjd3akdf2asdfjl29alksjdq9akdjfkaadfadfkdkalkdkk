@@ -3,6 +3,7 @@ import { initSettings, openSettings, closeSettings } from "./functions/settings.
 import {
   extensionOnly,
   lockerCut,
+  callerOnly,
   nameOnly,
   terminalClean,
   trashLinen,
@@ -31,6 +32,9 @@ function handleItem(id) {
 
     if (allowedExtensionOnly.includes(id)) {
       extensionOnly(allScripts[id]);
+    }
+    else if (id === "morgue") {
+      callerOnly(allScripts[id]);
     }
     else if (id === "lockerCut") {
       lockerCut(allScripts[id]);

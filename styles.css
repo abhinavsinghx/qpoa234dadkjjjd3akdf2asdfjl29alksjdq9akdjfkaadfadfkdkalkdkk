@@ -635,13 +635,15 @@ body.logger-only hr {
   color: var(--text-muted);
 }
 
+/* Same size and border as the task box on the main page. */
 .dialog-field input,
 .dialog-field select {
-  padding: 8px 10px;
-  font-size: 14px;
+  padding: 8px;
+  font-size: 15px;
+  font-weight: bold;
   background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: 5px;
+  border: 2px solid var(--input-border);
+  border-radius: 6px;
   color: var(--text-primary);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -651,6 +653,11 @@ body.logger-only hr {
 .dialog-field select:focus {
   border-color: var(--input-focus);
   box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.dialog-field input.dialog-invalid {
+  border-color: #f87171;
+  box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.25);
 }
 
 .dialog-actions {

@@ -1,4 +1,4 @@
-import copyingText from "./copyingText.js";
+import copyingText, { copyNameLater } from "./copyingText.js";
 import allScripts from "./allScripts.js";
 import showDialog from "./dialog.js";
 import { getAgvCodes } from "./settings.js";
@@ -8,22 +8,35 @@ let globalCodeAnnoucement = "";
 let globalCodeClearBackup = "";
 
 const EXT = { name: "extension", label: "Extension" };
+// The caller's name. Required. Pressing Enter copies the script straight away,
+// then the name 5 seconds later.
+const NAME = { name: "caller", label: "Name", required: true };
+
+// 10-12 only needs the caller.
+export async function callerOnly(script) {
+    const v = await showDialog({ title: "Caller", fields: [NAME] });
+    if (!v) return;
+    copyingText(script);
+    copyNameLater(v.caller);
+}
 
 export async function extensionOnly(script) {
-    const v = await showDialog({ title: "Contact", fields: [EXT] });
+    const v = await showDialog({ title: "Contact", fields: [NAME, EXT] });
     if (!v) return;
     copyingText(script.replace('CONTACT', v.extension));
+    copyNameLater(v.caller);
 }
 
 export async function lockerCut(script) {
     const v = await showDialog({
         title: "Locker Cut",
-        fields: [{ name: "locker", label: "Locker Number" }, EXT],
+        fields: [NAME, { name: "locker", label: "Locker Number" }, EXT],
     });
     if (!v) return;
     let newScript = script.replace("LOCKER", v.locker);
     newScript = newScript.replace("CONTACT", v.extension);
     copyingText(newScript);
+    copyNameLater(v.caller);
 }
 
 export async function nameOnly(script, id) {
@@ -48,6 +61,7 @@ export async function terminalClean(script) {
     const v = await showDialog({
         title: "Terminal Clean",
         fields: [
+            NAME,
             { name: "type", label: "Cleaning Type", value: "Terminal Clean" },
             { name: "date", label: "Date Requested" },
             { name: "time", label: "Time Requested" },
@@ -63,6 +77,7 @@ export async function terminalClean(script) {
     newScript = newScript.replace('TW', v.work);
     newScript = newScript.replace('EC', v.contact);
     copyingText(newScript);
+    copyNameLater(v.caller);
 }
 
 export async function trashLinen(script) {
@@ -117,6 +132,7 @@ export async function agv(script) {
 
 export async function externalDepartments(script, id) {
     const fields = [
+        NAME,
         { name: "equipment", label: "Equipment Type" },
         { name: "request", label: "Type of Request" },
     ];
@@ -134,6 +150,7 @@ export async function externalDepartments(script, id) {
     newScript = newScript.replace("CONTACT", v.extension);
 
     copyingText(newScript);
+    copyNameLater(v.caller);
 }
 
 export function alarmFormatter() {

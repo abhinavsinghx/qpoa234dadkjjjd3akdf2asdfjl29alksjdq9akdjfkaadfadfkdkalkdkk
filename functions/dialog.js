@@ -1,6 +1,7 @@
 // Shows a centered dialog with all fields at once.
 // Resolves to { [field.name]: value } on submit, or null if cancelled.
-// field: { name, label, value?, placeholder?, options? (renders a select) }
+// field: { name, label, value?, placeholder?, options? (renders a select),
+//          required? (the dialog will not submit while it is empty) }
 export default function showDialog({ title, fields, submitLabel = "Copy" }) {
     return new Promise(resolve => {
         const overlay = document.createElement("div");
@@ -13,7 +14,7 @@ export default function showDialog({ title, fields, submitLabel = "Copy" }) {
                     .map(o => `<option${o === f.value ? " selected" : ""}>${o}</option>`)
                     .join("")}</select>`
                 : `<input name="${f.name}" type="text" autocomplete="off" value="${value}" placeholder="${f.placeholder ?? ""}" />`;
-            return `<label class="dialog-field"><span>${f.label}</span>${control}</label>`;
+            return `<label class="dialog-field"><span>${f.label}${f.required ? " *" : ""}</span>${control}</label>`;
         }).join("");
 
         overlay.innerHTML = `
@@ -45,8 +46,15 @@ export default function showDialog({ title, fields, submitLabel = "Copy" }) {
 
         form.addEventListener("submit", (e) => {
             e.preventDefault();
+            const missing = fields.find(f => f.required && !form.elements[f.name].value.trim());
+            if (missing) {
+                const box = form.elements[missing.name];
+                box.classList.add("dialog-invalid");
+                box.focus();
+                return;
+            }
             const result = {};
-            fields.forEach(f => { result[f.name] = form.elements[f.name].value; });
+            fields.forEach(f => { result[f.name] = form.elements[f.name].value.trim(); });
             close(result);
         });
 

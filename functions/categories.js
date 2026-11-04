@@ -5,7 +5,7 @@
 // soon: true marks a placeholder that isn't set up yet.
 //
 // Still handled in script.js but not listed here, so they stay hidden:
-// terminalClean, trash, linen.
+// trash, linen.
 export default [
     { id: "security", label: "Security", items: [
         { id: "morgue", label: "10-12" },
@@ -22,6 +22,7 @@ export default [
         { id: "humberIt", label: "HRH IT" },
         { id: "ge", label: "GE" },
         { id: "supportServices", label: "Support Services", soon: true },
+        { id: "terminalClean", label: "Terminal Clean" },
     ] },
     { id: "engineer", label: "Engineer", items: [
         { id: "tooHot", label: "Too Hot" },
